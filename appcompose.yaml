@@ -1,0 +1,10 @@
+version: '3.8'
+services:
+  mycontainer:
+    image: updtini
+    ports: 
+      - 80:80
+  testcontainer:
+    image: abdulhaseeb8/secsvc
+    ports:
+      - 27017:27017

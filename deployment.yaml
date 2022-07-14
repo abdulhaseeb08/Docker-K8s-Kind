@@ -1,0 +1,69 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: main-service
+spec:
+  selector:
+    app: main-deployment
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-two
+spec:
+  selector:
+    app: sec-deployment
+  ports:
+    - protocol: TCP
+      port: 27017
+      targetPort: 27017
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mydeployment
+  labels:
+    app: main-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: main-deployment
+  template:
+    metadata:
+      labels:
+        app: main-deployment
+    spec:
+      containers:
+      - name: mycontainer
+        image: abdulhaseeb8/tinimage
+        ports:
+        - containerPort: 8080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: secdepl
+  labels:
+    app: sec-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sec-deployment
+  template:
+    metadata:
+      labels:
+        app: sec-deployment
+    spec:        
+      containers:
+      - name: testcontainer
+        image: abdulhaseeb8/secsvc
+        ports:
+        - containerPort: 27017
